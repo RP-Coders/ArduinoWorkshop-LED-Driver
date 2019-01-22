@@ -1,4 +1,4 @@
-// 4 Channel LED Driver v1.1.1Beta 
+// 4 Channel LED Driver v1.1.2
 // For LED Controller v1.1.0+ 
 // Copyright (c) 2018 http://retro-commodore.eu 
 // Author: Carsten Jensen aka Tomse 
@@ -37,8 +37,10 @@ decode_results results;
 #define ThreeQuater 560243803     //Arrow up
 #define Half 560227483            //Arrow down
 #define Full 560207083            //Bright +
-#define Effects 560244313         //Smart
-#define TT 560257573              //EcoView
+//#define Effects 560244313         //Smart
+//#define TT 560257573              //EcoView
+#define SinglePowerOn 560244313   //Smart
+#define SinglePowerOff 560224423   //Mute
  
 uint32_t LastCode = 0;
 uint32_t CurrentCode = 0;
@@ -186,26 +188,14 @@ void loop() {
         ChannelValue[SelectedLED] = 255;
         analogWrite(Channel[SelectedLED], ChannelValue[SelectedLED]);
         break;
-    case Effects:
-        //Serial.println(" -- now doing effects --") ;
-
-        for(int a=0;a<255;a++){
-          analogWrite(Channel[SelectedLED], a);
-          delay(5);
-        }
-        
-        for(int a=0;a<255;a++){
-          analogWrite(Channel[SelectedLED], 255-a);
-          delay(5);
-        }
-        
+    case SinglePowerOn:
+        ChannelValue[SelectedLED] = 255;
         analogWrite(Channel[SelectedLED], ChannelValue[SelectedLED]);
-        // make your own      
         break;
-    case TT:
-        // noget smart her
-//        Serial.println("Noget smart her");
-        break;
+    case SinglePowerOff:
+        ChannelValue[SelectedLED] = 0;
+        analogWrite(Channel[SelectedLED], ChannelValue[SelectedLED]);
+        break;        
     default:
         break;  
     }
